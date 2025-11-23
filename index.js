@@ -4,7 +4,7 @@ import session from "express-session";
 
 const host = "0.0.0.0";
 const porta =3000;
-var listaFornecedor = [];
+var listaProdutos = [];
 
 //var usuarioLogado = false; // isso é errado
 
@@ -79,8 +79,8 @@ server.get("/", verificarUsuarioLogado, (requisicao, resposta) =>{
                             Cadastro
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="nav-item"><a class="nav-link active" href="/cadastroFornecedor">Cadastro Fornecedor</a></li>
-                            <li class="nav-item"><a class="nav-link active" href="/listaFornecedores">Listar Fornecedores</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="/cadastroProduto">Cadastro cadastroProduto</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="/listaProdutos">Listar Produtos</a></li>
                         </ul>
                         <li class="nav-item">
                         <a class="nav-link active" aria-current="/" href="/logout">Sair</a>
@@ -108,8 +108,8 @@ server.get("/", verificarUsuarioLogado, (requisicao, resposta) =>{
                         </p>
 
                         <div class="mt-4">
-                            <a href="/cadastroFornecedor" class="btn btn-primary m-2">Cadastrar Fornecedor</a>
-                            <a href="/listaFornecedores" class="btn btn-secondary m-2">Listar Fornecedores</a>
+                            <a href="/cadastroProduto" class="btn btn-primary m-2">Cadastrar Produto</a>
+                            <a href="/listaProdutos" class="btn btn-secondary m-2">Listar Produtos</a>
                         </div>
                     </div>
                 </form>
@@ -122,436 +122,330 @@ server.get("/", verificarUsuarioLogado, (requisicao, resposta) =>{
         resposta.end();
 });
 
-server.get("/cadastroFornecedor", verificarUsuarioLogado, (requisicao,resposta) =>{
+server.get("/cadastroProduto", verificarUsuarioLogado, (requisicao,resposta) =>{
         resposta.send(`
-        <!doctype html>
-        <html lang="pt-br">
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>Cadastro Fornecedor</title>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-        </head>
-        <body>
-                        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="/">Menu</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cadastro Produto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Menu</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
-                        </li>
-                        <li class="nav-item dropdown">
+                    </li>
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Cadastro
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="nav-item"><a class="nav-link active" href="/cadastroFornecedor">Cadastro Fornecedor</a></li>
-                            <li class="nav-item"><a class="nav-link active" href="/listaFornecedores">Listar Fornecedores</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="/cadastroProduto">Cadastro Produto</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="/listaProdutos">Listar Produtos</a></li>
                         </ul>
-                        <li class="nav-item">
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link active" aria-current="/" href="/logout">Sair</a>
-                        </li>
-                    </ul>
-                    </div>
-                </div>
-                </nav>
-            <div class="container">
-                <h1 class="text-center border m-3 p-3 bg-light">Cadastro de Fornecedor </h1>
-                <form method="POST" action="/adicionarFornecedor" class="row g-3 needs-validation m-3 p-3 bg-light">
-                <div class="col-md-4">
-                    <label for="nomeFantasia" class="form-label">Nome Fantasia</label>
-                    <input type="text" class="form-control" id="nomeFantasia" name="nomeFantasia" value="">
-                </div>
-                <div class="col-md-4">
-                    <label for="razaoSocial" class="form-label">Razão Social</label>
-                    <input type="text" class="form-control" id="razaoSocial" name="razaoSocial" value="">
-                </div>
-                  <div class="col-md-4">
-                      <label for="CNPJ" class="form-label">CNPJ</label>
-                      <input type="text" class="form-control" id="CNPJ" name="CNPJ" placeholder="00.000.000/0000-00" maxlength="14">
-                  </div>      
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label for="CEP" class="form-label">CEP</label>
-                        <input type="text" id="CEP" name="CEP"  class="form-control" placeholder="00000-000" maxlength="8">
-                    </div>
-                    <div class="col-md-5">
-                        <label for="logradouro" class="form-label">Logradouro</label>
-                        <input type="text" id="logradouro" name="logradouro" class="form-control">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="numero" class="form-label">Número</label>
-                        <input type="text" id="numero" name="numero" class="form-control">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="complemento" class="form-label">Complemento</label>
-                        <input type="text" id="complemento" name="complemento"  class="form-control">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="bairro" class="form-label">Bairro</label>
-                        <input type="text" id="bairro" name="bairro"  class="form-control">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="cidade" class="form-label">Cidade</label>
-                        <input type="text" id="cidade" name="cidade"  class="form-control">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="UF" class="form-label">Estado (UF)</label>
-                            <select class="form-select" id="UF" name="UF">
-                                <option value="">Selecione o estado...</option>
-                                <option value="AC">Acre (AC)</option>
-                                <option value="AL">Alagoas (AL)</option>
-                                <option value="AP">Amapá (AP)</option>
-                                <option value="AM">Amazonas (AM)</option>
-                                <option value="BA">Bahia (BA)</option>
-                                <option value="CE">Ceará (CE)</option>
-                                <option value="DF">Distrito Federal (DF)</option>
-                                <option value="ES">Espírito Santo (ES)</option>
-                                <option value="GO">Goiás (GO)</option>
-                                <option value="MA">Maranhão (MA)</option>
-                                <option value="MT">Mato Grosso (MT)</option>
-                                <option value="MS">Mato Grosso do Sul (MS)</option>
-                                <option value="MG">Minas Gerais (MG)</option>
-                                <option value="PA">Pará (PA)</option>
-                                <option value="PB">Paraíba (PB)</option>
-                                <option value="PR">Paraná (PR)</option>
-                                <option value="PE">Pernambuco (PE)</option>
-                                <option value="PI">Piauí (PI)</option>
-                                <option value="RJ">Rio de Janeiro (RJ)</option>
-                                <option value="RN">Rio Grande do Norte (RN)</option>
-                                <option value="RS">Rio Grande do Sul (RS)</option>
-                                <option value="RO">Rondônia (RO)</option>
-                                <option value="RR">Roraima (RR)</option>
-                                <option value="SC">Santa Catarina (SC)</option>
-                                <option value="SP">São Paulo (SP)</option>
-                                <option value="SE">Sergipe (SE)</option>
-                                <option value="TO">Tocantins (TO)</option>
-                            </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="email" class="form-label">E-mail</label>
-                        <input type="text" id="email" name="email"  class="form-control">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="telefone" class="form-label">Telefone</label>
-                        <input type="text" id="telefone" name="telefone"  class="form-control">
-                    </div>
-                </div>
-                <div class="col-12">
-                    <br><button class="btn btn-primary" type="submit">Cadastrar</button>
-                    <a class="btn btn-secondary" href="/">Voltar</a>
-                </div>
+                    </li>
+                </ul>
             </div>
-            </form>
-        </div>     
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-        </body>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="text-center border m-3 p-3 bg-light">Cadastro de Produto</h1>
+
+        <form method="POST" action="/cadastroProduto" class="row g-3 needs-validation m-3 p-3 bg-light">
+
+            <div class="col-md-4">
+                <label for="codigoBarras" class="form-label">Código de Barras</label>
+                <input type="text" class="form-control" id="codigoBarras" name="codigoBarras">
+            </div>
+
+            <div class="col-md-8">
+                <label for="descricao" class="form-label">Descrição do Produto</label>
+                <input type="text" class="form-control" id="descricao" name="descricao">
+            </div>
+
+            <div class="col-md-4">
+                <label for="precoCusto" class="form-label">Preço de Custo</label>
+                <input type="number" step="0.01" class="form-control" id="precoCusto" name="precoCusto">
+            </div>
+
+            <div class="col-md-4">
+                <label for="precoVenda" class="form-label">Preço de Venda</label>
+                <input type="number" step="0.01" class="form-control" id="precoVenda" name="precoVenda">
+            </div>
+
+            <div class="col-md-4">
+                <label for="validade" class="form-label">Data de Validade</label>
+                <input type="date" class="form-control" id="validade" name="validade">
+            </div>
+
+            <div class="col-md-4">
+                <label for="estoque" class="form-label">Quantidade em Estoque</label>
+                <input type="number" class="form-control" id="estoque" name="estoque">
+            </div>
+
+            <div class="col-md-8">
+                <label for="fabricante" class="form-label">Nome do Fabricante</label>
+                <input type="text" class="form-control" id="fabricante" name="fabricante">
+            </div>
+
+            <div class="col-12">
+                <br>
+                <button class="btn btn-primary" type="submit">Cadastrar</button>
+                <a class="btn btn-secondary" href="/">Voltar</a>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
 </html>
+
 `);
 });
 
-server.post("/adicionarFornecedor", verificarUsuarioLogado, (requisicao, resposta) =>{
-    const nomeFantasia = requisicao.body.nomeFantasia;
-    const razaoSocial = requisicao.body.razaoSocial;
-    const CNPJ = requisicao.body.CNPJ;
-    const CEP = requisicao.body.CEP;
-    const logradouro = requisicao.body.logradouro;
-    const numero = requisicao.body.numero;
-    const complemento = requisicao.body.complemento;
-    const bairro = requisicao.body.bairro;
-    const cidade = requisicao.body.cidade;
-    const UF = requisicao.body.UF;
-    const email = requisicao.body.email;
-    const telefone = requisicao.body.telefone;
+server.post("/cadastroProduto", verificarUsuarioLogado, (requisicao, resposta) =>{
+const codigoBarras = requisicao.body.codigoBarras;
+const descricao = requisicao.body.descricao;
+const precoCusto = requisicao.body.precoCusto;
+const precoVenda = requisicao.body.precoVenda;
+const validade = requisicao.body.validade;
+const estoque = requisicao.body.estoque;
+const fabricante = requisicao.body.fabricante;
 
-    if (nomeFantasia && razaoSocial && CNPJ && CEP && logradouro && numero && complemento && bairro && cidade && UF && email && telefone) {
-    listaFornecedor.push({nomeFantasia,razaoSocial,CNPJ,CEP,logradouro,numero,complemento,bairro,cidade,UF,email,telefone});
-    resposta.redirect("/listaFornecedores");
+if (codigoBarras && descricao && precoCusto && precoVenda && validade && estoque && fabricante) {
+    listaProdutos.push({ codigoBarras, descricao, precoCusto, precoVenda, validade, estoque, fabricante });
+    resposta.redirect("/listaProdutos");
 }
-else{
+else {
     let conteudo = `
-        <!doctype html>
-        <html lang="pt-br">
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>Cadastro Fornecedor</title>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-        </head>
-        <body>
-            <div class="container">
-                <h1 class="text-center border m-3 p-3 bg-light">Cadastro de Fornecedor </h1>
-                <form method="POST" action="/adicionarFornecedor" class="row g-3 needs-validation m-3 p-3 bg-light">
+    <!doctype html>
+    <html lang="pt-br">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Cadastro de Produto</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="text-center border m-3 p-3 bg-light">Cadastro de Produto</h1>
+
+            <form method="POST" action="/cadastroProduto" class="row g-3 needs-validation m-3 p-3 bg-light">
+
                 <div class="col-md-4">
-                    <label for="nomeFantasia" class="form-label">Nome Fantasia</label>
-                    <input type="text" class="form-control" id="nomeFantasia" name="nomeFantasia" value=${nomeFantasia}>
-                `;
-            if(!nomeFantasia){
-                conteudo += `
-                <div>
-                    <p class="text-danger">Porfavor, informe o nome fantasia </p>
-                </div>`;
-            };
-            conteudo +=`</div>
+                    <label for="codigoBarras" class="form-label">Código de Barras</label>
+                    <input type="text" class="form-control" id="codigoBarras" name="codigoBarras" value="${codigoBarras}">
+    `;
+    if (!codigoBarras) {
+        conteudo += `
+            <div>
+                <p class="text-danger">Por favor, informe o código de barras.</p>
+            </div>`;
+    }
+    conteudo += `</div>
+
+                <div class="col-md-8">
+                    <label for="descricao" class="form-label">Descrição do Produto</label>
+                    <input type="text" class="form-control" id="descricao" name="descricao" value="${descricao}">
+    `;
+    if (!descricao) {
+        conteudo += `
+            <div>
+                <p class="text-danger">Por favor, informe a descrição do produto.</p>
+            </div>`;
+    }
+    conteudo += `</div>
+
                 <div class="col-md-4">
-                    <label for="razaoSocial" class="form-label">Razão Social</label>
-                    <input type="text" class="form-control" id="razaoSocial" name="razaoSocial" value=${razaoSocial}>
-                `;
-            if(!razaoSocial){
-                conteudo += `
-                <div>
-                    <p class="text-danger">Porfavor, informe a Razão Social </p>
-                </div>`;
-            };
-            conteudo +=`</div>
-                  <div class="col-md-4">
-                      <label for="CNPJ" class="form-label">CNPJ</label>
-                      <input type="text" class="form-control" id="CNPJ" name="CNPJ" placeholder="00.000.000/0000-00" maxlength="18" value=${CNPJ}>
-                  `;
-            if(!CNPJ){
-            conteudo += `
-                <div>
-                    <p class="text-danger">Porfavor, informe o CNPJ </p>
-                </div>`;
-            };
-            conteudo +=`</div>      
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label for="CEP" class="form-label">CEP</label>
-                        <input type="text" id="CEP" name="CEP"  class="form-control" placeholder="00000-000" maxlength="9" value=${CEP}>
-                    `;
-            if(!CEP){
-                conteudo += `
-                <div>
-                    <p class="text-danger">Porfavor, informe o CEP do fornecedor </p>
-                </div>`;
-            };
-            conteudo +=`</div>
-                    <div class="col-md-5">
-                        <label for="logradouro" class="form-label">Logradouro</label>
-                        <input type="text" id="logradouro" name="logradouro" class="form-control" value=${logradouro}>
-                    `;
-            if(!logradouro){
-                conteudo += `
-                <div>
-                    <p class="text-danger">Porfavor, informe o Logradouro do fornecedor </p>
-                </div>`;
-            };
-            conteudo +=`</div>
-                    <div class="col-md-2">
-                        <label for="numero" class="form-label">Número</label>
-                        <input type="number" id="numero" name="numero" class="form-control" value=${numero}>
-                    `;
-            if(!numero){
-                conteudo += `
-                <div>
-                    <p class="text-danger">Porfavor, informe o Número </p>
-                </div>`;
-            };
-            conteudo +=`</div>
-                    <div class="col-md-2">
-                        <label for="complemento" class="form-label">Complemento</label>
-                        <input type="text" id="complemento" name="complemento"  class="form-control" value=${complemento}>
-`;
-            if(!complemento){`
-                <div>
-                    <p class="text-danger">Porfavor, informe o complemento </p>
-                </div>`;
-            };
-                    `</div>
-                    <div class="col-md-4">
-                        <label for="bairro" class="form-label">Bairro</label>
-                        <input type="text" id="bairro" name="bairro"  class="form-control" value=${bairro}>
-                    `;
-            if(!bairro){
-                conteudo += `
-                <div>
-                    <p class="text-danger">Porfavor, informe o Bairro do fornecedor </p>
-                </div>`;
-            };
-            conteudo +=`</div>
-                    <div class="col-md-4">
-                        <label for="cidade" class="form-label">Cidade</label>
-                        <input type="text" id="cidade" name="cidade"  class="form-control" value=${cidade}>
-                    `;
-            if(!cidade){
-                conteudo += `
-                <div>
-                    <p class="text-danger">Porfavor, informe a cidade do fornecedor </p>
-                </div>`;
-            };
-            conteudo +=`</div>
-                    <div class="col-md-4">
-                        <label for="UF" class="form-label">Estado (UF)</label>
-                            <select class="form-select" id="UF" name="UF" value=${UF}>
-                                <option value="">Selecione o estado...</option>
-                                <option value="AC">Acre (AC)</option>
-                                <option value="AL">Alagoas (AL)</option>
-                                <option value="AP">Amapá (AP)</option>
-                                <option value="AM">Amazonas (AM)</option>
-                                <option value="BA">Bahia (BA)</option>
-                                <option value="CE">Ceará (CE)</option>
-                                <option value="DF">Distrito Federal (DF)</option>
-                                <option value="ES">Espírito Santo (ES)</option>
-                                <option value="GO">Goiás (GO)</option>
-                                <option value="MA">Maranhão (MA)</option>
-                                <option value="MT">Mato Grosso (MT)</option>
-                                <option value="MS">Mato Grosso do Sul (MS)</option>
-                                <option value="MG">Minas Gerais (MG)</option>
-                                <option value="PA">Pará (PA)</option>
-                                <option value="PB">Paraíba (PB)</option>
-                                <option value="PR">Paraná (PR)</option>
-                                <option value="PE">Pernambuco (PE)</option>
-                                <option value="PI">Piauí (PI)</option>
-                                <option value="RJ">Rio de Janeiro (RJ)</option>
-                                <option value="RN">Rio Grande do Norte (RN)</option>
-                                <option value="RS">Rio Grande do Sul (RS)</option>
-                                <option value="RO">Rondônia (RO)</option>
-                                <option value="RR">Roraima (RR)</option>
-                                <option value="SC">Santa Catarina (SC)</option>
-                                <option value="SP">São Paulo (SP)</option>
-                                <option value="SE">Sergipe (SE)</option>
-                                <option value="TO">Tocantins (TO)</option>
-                            </select>
-                    `;
-            if(!UF){
-                conteudo += `
-                <div>
-                    <p class="text-danger">Porfavor, informe o estado do fornecedor </p>
-                </div>`;
-            };
-            conteudo +=`</div>
-                    <div class="col-md-4">
-                        <label for="email" class="form-label">E-mail</label>
-                        <input type="text" id="email" name="email"  class="form-control" value=${email}>
-                    `;
-            if(!email){
-                conteudo += `
-                <div>
-                    <p class="text-danger">Porfavor, informe o E-mail do fornecedor </p>
-                </div>`;
-            };
-            conteudo +=`</div>
-                    <div class="col-md-4">
-                        <label for="telefone" class="form-label">Telefone</label>
-                        <input type="text" id="telefone" name="telefone"  class="form-control" value=${telefone}>
-                    `;
-            if(!telefone){
-                conteudo += `
-                <div>
-                    <p class="text-danger">Porfavor, informe o Telefone do fornecedor </p>
-                </div>`;
-            };
-            conteudo +=`</div>
+                    <label for="precoCusto" class="form-label">Preço de Custo</label>
+                    <input type="number" step="0.01" class="form-control" id="precoCusto" name="precoCusto" value="${precoCusto}">
+    `;
+    if (!precoCusto) {
+        conteudo += `
+            <div>
+                <p class="text-danger">Por favor, informe o preço de custo.</p>
+            </div>`;
+    }
+    conteudo += `</div>
+
+                <div class="col-md-4">
+                    <label for="precoVenda" class="form-label">Preço de Venda</label>
+                    <input type="number" step="0.01" class="form-control" id="precoVenda" name="precoVenda" value="${precoVenda}">
+    `;
+    if (!precoVenda) {
+        conteudo += `
+            <div>
+                <p class="text-danger">Por favor, informe o preço de venda.</p>
+            </div>`;
+    }
+    conteudo += `</div>
+
+                <div class="col-md-4">
+                    <label for="validade" class="form-label">Data de Validade</label>
+                    <input type="date" class="form-control" id="validade" name="validade" value="${validade}">
+    `;
+    if (!validade) {
+        conteudo += `
+            <div>
+                <p class="text-danger">Por favor, informe a data de validade.</p>
+            </div>`;
+    }
+    conteudo += `</div>
+
+                <div class="col-md-4">
+                    <label for="estoque" class="form-label">Quantidade em Estoque</label>
+                    <input type="number" class="form-control" id="estoque" name="estoque" value="${estoque}">
+    `;
+    if (!estoque) {
+        conteudo += `
+            <div>
+                <p class="text-danger">Por favor, informe a quantidade em estoque.</p>
+            </div>`;
+    }
+    conteudo += `</div>
+
+                <div class="col-md-8">
+                    <label for="fabricante" class="form-label">Fabricante</label>
+                    <input type="text" class="form-control" id="fabricante" name="fabricante" value="${fabricante}">
+    `;
+    if (!fabricante) {
+        conteudo += `
+            <div>
+                <p class="text-danger">Por favor, informe o fabricante.</p>
+            </div>`;
+    }
+
+    conteudo += `
                 </div>
+
                 <div class="col-12">
-                    <br><button class="btn btn-primary" type="submit">Cadastrar</button>
+                    <br>
+                    <button class="btn btn-primary" type="submit">Cadastrar</button>
                     <a class="btn btn-secondary" href="/">Voltar</a>
                 </div>
-            </div>
+
             </form>
-        </div>     
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-        </body>
-</html>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+    </html>
 `;
         resposta.send(conteudo);
 }
 });
 
-server.get("/listaFornecedores", verificarUsuarioLogado, (requisicao, resposta) => {
+server.get("/listaProdutos", verificarUsuarioLogado, (requisicao, resposta) => {
     let conteudo = `
-            <!doctype html>
+        <!doctype html>
         <html lang="pt-br">
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>Lista de fornecedor do sistema</title>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+            <title>Lista de Produtos do Sistema</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
         </head>
         <body>
-                        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="/">Menu</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
                     </button>
+
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Cadastro
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="nav-item"><a class="nav-link active" href="/cadastroFornecedor">Cadastro Fornecedor</a></li>
-                            <li class="nav-item"><a class="nav-link active" href="/listaFornecedores">Listar Fornecedores</a></li>
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" 
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Cadastro
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/cadastroProduto">Cadastro de Produto</a></li>
+                                    <li><a class="dropdown-item" href="/listaProdutos">Listar Produtos</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/logout">Sair</a>
+                            </li>
+
                         </ul>
-                        <li class="nav-item">
-                        <a class="nav-link active" aria-current="/" href="/logout">Sair</a>
-                        </li>
-                    </ul>
                     </div>
                 </div>
-                </nav>
+            </nav>
+
             <div class="container mt-5">
-            <h2 class="text-center mb-4">Lista de Fornecedores Cadastrados</h2>
-            
-            <div class="table-responsive shadow-sm rounded-3">
-                <table class="table table-striped table-hover align-middle">
-                <thead class="table-primary text-center">
-                    <tr>
-                        <th>Razão Social</th>
-                        <th>Nome Fantasia</th>
-                        <th>CNPJ</th>
-                        <th>CEP</th>
-                        <th>Logradouro</th>
-                        <th>Numero</th>
-                        <th>Complemento</th>
-                        <th>Bairro</th>
-                        <th>Cidade</th>
-                        <th>Estado</th>
-                        <th>E-mail</th>
-                        <th>Telefone</th>
-                    </tr>
-                </thead>
-                <tbody id="tabela-fornecedores">`;
-        for(let i = 0; i < listaFornecedor.length; i++){
+                <h2 class="text-center mb-4">Lista de Produtos Cadastrados</h2>
+
+                <div class="table-responsive shadow-sm rounded-3">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead class="table-primary text-center">
+                            <tr>
+                                <th>Código de Barras</th>
+                                <th>Descrição</th>
+                                <th>Preço de Custo</th>
+                                <th>Preço de Venda</th>
+                                <th>Validade</th>
+                                <th>Estoque</th>
+                                <th>Fabricante</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-produtos">`;
+
+        for (let i = 0; i < listaProdutos.length; i++) {
             conteudo += `
                 <tr>
-                    <td>${listaFornecedor[i].razaoSocial}</td>
-                    <td>${listaFornecedor[i].nomeFantasia}</td>
-                    <td>${listaFornecedor[i].CNPJ}</td>
-                    <td>${listaFornecedor[i].CEP}</td>
-                    <td>${listaFornecedor[i].logradouro}</td>
-                    <td>${listaFornecedor[i].numero}</td>
-                    <td>${listaFornecedor[i].complemento}</td>
-                    <td>${listaFornecedor[i].bairro}</td>
-                    <td>${listaFornecedor[i].cidade}</td>
-                    <td>${listaFornecedor[i].UF}</td>
-                    <td>${listaFornecedor[i].email}</td>
-                    <td>${listaFornecedor[i].telefone}</td>
+                    <td>${listaProdutos[i].codigoBarras}</td>
+                    <td>${listaProdutos[i].descricao}</td>
+                    <td>R$ ${parseFloat(listaProdutos[i].precoCusto).toFixed(2)}</td>
+                    <td>R$ ${parseFloat(listaProdutos[i].precoVenda).toFixed(2)}</td>
+                    <td>${listaProdutos[i].validade}</td>
+                    <td>${listaProdutos[i].estoque}</td>
+                    <td>${listaProdutos[i].fabricante}</td>
                 </tr>
             `;
         }
-        conteudo +=`
-            </tbody>
-                    </div>
-                </table>
+
+        conteudo += `
+                        </tbody>
+                    </table>
+                </div>
+
+                <a class="btn btn-secondary mt-3" href="/">Voltar</a>
+
             </div>
-            <a class="btn btn-secondary" href="/">Voltar</a>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
         </body>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
         </html>
-        `;
-                resposta.send(conteudo);
+    `;
+
+    resposta.send(conteudo);
 });
+
 server.get("/logout", (requisicao,resposta) =>{ 
     requisicao.session.destroy();
     resposta.send(`
@@ -608,8 +502,8 @@ server.get("/logout", (requisicao,resposta) =>{
                             Cadastro
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="nav-item"><a class="nav-link active" href="/cadastroFornecedor">Cadastro Fornecedor</a></li>
-                            <li class="nav-item"><a class="nav-link active" href="/listaFornecedores">Listar Fornecedores</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="/cadastroProduto">Cadastro de Produto</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="/listaProdutos">Listar Produtos</a></li>
                         </ul>
                         <li class="nav-item">
                         <a class="nav-link active" aria-current="/" href="/logout">Sair</a>
@@ -677,8 +571,8 @@ server.get("/logout", (requisicao,resposta) =>{
                             Cadastro
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="nav-item"><a class="nav-link active" href="/cadastroFornecedor">Cadastro Fornecedor</a></li>
-                            <li class="nav-item"><a class="nav-link active" href="/listaFornecedores">Listar Fornecedores</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="/cadastroProduto">Cadastro de Produto</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="/listaProdutos">Listar Produtos</a></li>
                         </ul>
                         <li class="nav-item">
                         <a class="nav-link active" aria-current="/" href="/logout">Sair</a>
