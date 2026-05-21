@@ -1,2 +1,2 @@
-https://github.com/Caaiomf/Atividade3PPI
-https://atividade3fornecedorloginlogou.vercel.app/
+https://github.com/Caaiomf/TrabalhoFinalPPI
+https://trabalho-final-ppi-caiofavarao.vercel.app/

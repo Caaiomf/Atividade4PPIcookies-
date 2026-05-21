@@ -6,6 +6,226 @@ const host = "0.0.0.0";
 const porta =3000;
 var listaProdutos = [];
 
+const estiloGlobal = `
+<style>
+    :root {
+        --cor-primaria: #245953;
+        --cor-primaria-escura: #173f3a;
+        --cor-destaque: #f2c14e;
+        --cor-fundo: #f7f9fb;
+        --cor-texto: #23313d;
+        --cor-borda: #d9e2ec;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        min-height: 100vh;
+        margin: 0;
+        color: var(--cor-texto);
+        background:
+            radial-gradient(circle at top left, rgba(242, 193, 78, 0.18), transparent 30rem),
+            linear-gradient(135deg, #eef6f4 0%, var(--cor-fundo) 50%, #fff8e1 100%);
+        font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    }
+
+    .navbar {
+        padding: 0.85rem 1rem;
+        background: rgba(255, 255, 255, 0.95) !important;
+        border-bottom: 1px solid rgba(36, 89, 83, 0.12);
+        box-shadow: 0 10px 30px rgba(31, 64, 78, 0.10);
+        backdrop-filter: blur(8px);
+    }
+
+    .navbar-brand {
+        color: var(--cor-primaria) !important;
+        font-weight: 800;
+    }
+
+    .nav-link,
+    .dropdown-item {
+        color: #3e5363 !important;
+        font-weight: 600;
+        border-radius: 0.65rem;
+    }
+
+    .nav-link {
+        padding: 0.55rem 0.85rem !important;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus,
+    .dropdown-item:hover,
+    .dropdown-item:focus {
+        color: var(--cor-primaria-escura) !important;
+        background: rgba(36, 89, 83, 0.09);
+    }
+
+    .dropdown-menu {
+        padding: 0.5rem;
+        border: 0;
+        border-radius: 0.85rem;
+        box-shadow: 0 16px 36px rgba(31, 64, 78, 0.16);
+    }
+
+    .navbar > .container-fluid + .container-fluid {
+        width: auto;
+        margin-left: auto;
+    }
+
+    .dflex p {
+        margin: 0;
+        padding: 0.45rem 0.8rem;
+        color: var(--cor-primaria);
+        background: rgba(36, 89, 83, 0.09);
+        border-radius: 999px;
+        font-size: 0.92rem;
+        font-weight: 700;
+    }
+
+    .container {
+        max-width: 1080px;
+    }
+
+    .container > h1,
+    .container > h2 {
+        margin-top: 2rem !important;
+        margin-bottom: 1.25rem !important;
+        color: var(--cor-primaria);
+        background: transparent !important;
+        border: 0 !important;
+        font-weight: 800;
+    }
+
+    .container form,
+    .row.justify-content-center,
+    .table-responsive {
+        background: rgba(255, 255, 255, 0.94) !important;
+        border: 1px solid rgba(36, 89, 83, 0.12);
+        border-radius: 1rem !important;
+        box-shadow: 0 18px 45px rgba(31, 64, 78, 0.12) !important;
+    }
+
+    .container form {
+        padding: 1.5rem !important;
+    }
+
+    .container form > .bg-light {
+        width: 100%;
+        max-width: 620px;
+        margin-right: auto !important;
+        margin-left: auto !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .form-label {
+        color: #34495e;
+        font-weight: 700;
+    }
+
+    .form-control {
+        padding: 0.75rem 0.9rem;
+        border: 1px solid var(--cor-borda);
+        border-radius: 0.7rem;
+    }
+
+    .form-control:focus {
+        border-color: var(--cor-primaria);
+        box-shadow: 0 0 0 0.25rem rgba(36, 89, 83, 0.16);
+    }
+
+    .btn {
+        padding: 0.7rem 1.05rem;
+        border: 0;
+        border-radius: 0.7rem;
+        font-weight: 700;
+        box-shadow: 0 10px 18px rgba(31, 64, 78, 0.14);
+    }
+
+    .btn-primary {
+        background: var(--cor-primaria);
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+        background: var(--cor-primaria-escura);
+    }
+
+    .btn-secondary {
+        background: #51606d;
+    }
+
+    .btn-danger {
+        background: #b43c3c;
+    }
+
+    .text-danger {
+        margin-top: 0.45rem;
+        font-size: 0.92rem;
+        font-weight: 700;
+    }
+
+    .table-responsive {
+        overflow: hidden;
+    }
+
+    .table {
+        margin-bottom: 0;
+        --bs-table-striped-bg: rgba(36, 89, 83, 0.045);
+    }
+
+    .table thead th {
+        padding: 1rem;
+        color: #fff;
+        background: var(--cor-primaria) !important;
+        border: 0;
+    }
+
+    .table tbody td {
+        padding: 0.9rem 1rem;
+    }
+
+    @media (max-width: 768px) {
+        body {
+            background: var(--cor-fundo);
+        }
+
+        .navbar {
+            padding: 0.75rem;
+        }
+
+        .navbar > .container-fluid + .container-fluid {
+            width: 100%;
+            margin-top: 0.65rem;
+            margin-left: 0;
+        }
+
+        .container {
+            padding-right: 1rem;
+            padding-left: 1rem;
+        }
+
+        .container > h1,
+        .container > h2 {
+            font-size: 1.7rem;
+        }
+
+        .container form {
+            margin: 1rem 0 !important;
+            padding: 1.1rem !important;
+        }
+
+        .btn {
+            width: 100%;
+            margin: 0.35rem 0 !important;
+        }
+    }
+</style>
+`;
+
 //var usuarioLogado = false; // isso é errado
 
 const server = express ();
@@ -61,6 +281,7 @@ server.get("/", verificarUsuarioLogado, (requisicao, resposta) =>{
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>Menu</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+            ${estiloGlobal}
         </head>
         <body>
                 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -131,6 +352,7 @@ server.get("/cadastroProduto", verificarUsuarioLogado, (requisicao,resposta) =>{
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cadastro Produto</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    ${estiloGlobal}
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -239,6 +461,7 @@ else {
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Cadastro de Produto</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+        ${estiloGlobal}
     </head>
     <body>
         <div class="container">
@@ -358,6 +581,7 @@ server.get("/listaProdutos", verificarUsuarioLogado, (requisicao, resposta) => {
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>Lista de Produtos do Sistema</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+            ${estiloGlobal}
         </head>
         <body>
 
@@ -456,6 +680,7 @@ server.get("/logout", (requisicao,resposta) =>{
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>Logout</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+            ${estiloGlobal}
         </head>
         <body>
             <div class="container">
@@ -484,6 +709,7 @@ server.get("/logout", (requisicao,resposta) =>{
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>Menu</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+            ${estiloGlobal}
         </head>
         <body>
                 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -553,6 +779,7 @@ server.get("/logout", (requisicao,resposta) =>{
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>Menu</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+            ${estiloGlobal}
         </head>
         <body>
                 <nav class="navbar navbar-expand-lg bg-body-tertiary">
